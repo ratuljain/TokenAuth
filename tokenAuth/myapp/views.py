@@ -12,7 +12,7 @@ from django.http import JsonResponse
 def user_list(request):
     """
     List all users
-    curl -X POST http://localhost:8000/api/tasks/
+    curl -X GET http://localhost:8000/api/tasks/
     Create a new user
     curl -X POST http://localhost:8000/api/tasks/ -d "username=ratul&password=jain"
     """
@@ -36,7 +36,7 @@ def user_list(request):
 @api_view(['GET'])
 def user_detail(request, pk):
     """
-    Generates a JWT for a given user. JWT expires after 2 mins
+    Generates a JWT for a given user. JWT expires after 5 mins
     http://localhost:8000/api/token/3
     """
     try:
@@ -45,9 +45,9 @@ def user_detail(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        token = jwt.encode({'username': user.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=120)}, 'secret', algorithm='HS256')
+        token = jwt.encode({'username': user.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=300)}, 'secret', algorithm='HS256')
         # token = jwt.encode({'username': user.username}, 'seKre8', algorithm='HS256')
-        print token
+        # print token
         response_data = {}
         response_data['token'] = token
         user.token_field = token
